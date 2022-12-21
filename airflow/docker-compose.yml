@@ -1,0 +1,56 @@
+version: '3.5'
+services:
+    postgres:
+        image: postgres:13
+        env_file:
+            - .env
+        volumes:
+            - postgres-db-volume:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "airflow"]
+            interval: 5s
+            retries: 5
+        restart: always
+
+    scheduler:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: scheduler
+        restart: on-failure
+        depends_on:
+            - postgres
+        env_file:
+            - .env
+        volumes:
+            - ./dags:/opt/airflow/dags
+            - ./logs:/opt/airflow/logs
+            - ./plugins:/opt/airflow/plugins
+            - ./scripts:/opt/airflow/scripts
+            - ~/.google/credentials/:/.google/credentials
+
+
+    webserver:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        entrypoint: /opt/airflow/scripts/entrypoint.sh
+        restart: on-failure
+        depends_on:
+            - postgres
+            - scheduler
+        env_file:
+            - .env
+        volumes:
+            - ./dags:/opt/airflow/dags
+            - ./logs:/opt/airflow/logs
+            - ./plugins:/opt/airflow/plugins
+            - ~/.google/credentials/:/.google/credentials:ro
+            - ./scripts:/opt/airflow/scripts
+        user: "${AIRFLOW_UID:-50000}:0"
+        ports:
+            - "8080:8080"
+
+
+volumes:
+  postgres-db-volume:
