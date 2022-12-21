@@ -5,7 +5,7 @@ FROM apache/airflow:slim-latest
 ENV AIRFLOW_HOME=/opt/airflow
 
 USER root
-RUN apt-get update -qq && apt-get install vim -qqq
+RUN apt-get update -qq && apt-get install vim python3-dev libpq-dev gcc -qqq
 # git gcc g++ -qqq
 
 
