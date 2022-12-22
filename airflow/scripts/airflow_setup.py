@@ -10,13 +10,14 @@ def drop_all_connections(session):
     connections = session.query(Connection).all()
     for conn in connections:
         session.delete(conn)
+    session.commit()
 
 
 def create_connections(session):
     postgres_test_db_conn = Connection(
         conn_id=f'postgres_test_db_conn',
         conn_type='postgres',
-        host='data_talks_postgres',  # container name of postgres
+        host='data-talks-postgres',  # container name of postgres
         port=5432,
         login=os.environ.get('POSTGRES_USER'),
         password=os.environ.get('POSTGRES_PASSWORD'),
@@ -31,7 +32,7 @@ def create_connections(session):
         extra={
             # Specify extra parameters here
             # "region_name": "eu-central-1",
-            "endpoint_url": "data_talks_minio:9000",  # host:port
+            "endpoint_url": "http://data-talks-minio:9000",  # host:port
         },
     )
 
@@ -51,6 +52,7 @@ def create_connections(session):
         postgres_test_db_conn,
         s3_minio_conn
     ])
+    session.commit()
 
 
 @provide_session
