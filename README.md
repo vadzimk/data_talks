@@ -4,7 +4,7 @@ username: `admin`
 password: `admin`  
 
 Local environment dependencies installation:  
-`pip install apache-airflow apache-airflow-providers-postgres`
+`pip install apache-airflow apache-airflow-providers-postgres apache-airflow-providers-amazon`
 Configure postgres provider connection:
 ![postgres provider connection in airflow](postgres_provider_connection.png)
 
