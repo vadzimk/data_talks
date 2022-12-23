@@ -14,3 +14,9 @@ see environment variables:
 `MINIO_ROOT_PASSWORD`
 create a bucket `airflow`
 
+### Notes
+- connections are declared in `airflow/scripts/airflow_setup.py`,
+you can use look up connection ids from that file to use them in DAGs
+- [psycopg](https://www.psycopg.org/docs/) documentation for Python PostgreSQL database adapter
+
+
