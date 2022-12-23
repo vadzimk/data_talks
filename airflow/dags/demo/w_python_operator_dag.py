@@ -29,10 +29,13 @@ def get_address(ti):
 default_args = {
     'owner': 'airflow',
     'retries': 5,
-    'retry_delay': timedelta(minutes=5)
+    'retry_delay': timedelta(minutes=5),
+    "tags": ["demo"]
+
 }
 
-with DAG(default_args=default_args, dag_id="dag_with_python_operator_v5", description="first dag with python operator",
+with DAG(dag_id="dag_with_python_operator_v5",
+         default_args=default_args, description="first dag with python operator",
          start_date=datetime.now(), schedule_interval="@once"):
     task0 = PythonOperator(task_id="greet_task", python_callable=greet_one, op_kwargs={'name': 'Gypsy'})
     task1 = PythonOperator(task_id="get_name", python_callable=get_name)

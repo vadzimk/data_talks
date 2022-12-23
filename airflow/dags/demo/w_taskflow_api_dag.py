@@ -4,7 +4,8 @@ from airflow.decorators import dag, task
 default_args = {
     'owner': 'airflow',
     'retries': 5,
-    'retry_delay': timedelta(minutes=5)
+    'retry_delay': timedelta(minutes=5),
+    "tags": ["demo"]
 }
 
 

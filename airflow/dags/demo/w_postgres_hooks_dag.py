@@ -12,6 +12,7 @@ default_args = {
     "owner": "airflow",
     "retries": 5,
     "retry_delay": timedelta(minutes=5),
+    "tags": ["demo"]
 }
 
 
@@ -45,6 +46,7 @@ def postgres_to_s3(ds_nodash, next_ds_nodash):
         filename = f"get_orders_{ds_nodash}.txt"
         logging.info(f"{temp_file.name} {'' if os.path.isfile(temp_file.name) else 'not'} exist")
         s3_hook.load_file(filename=temp_file.name, key=filename, bucket_name="airflow", replace=True)
+        logging.info(f"Uploaded {filename} to the bucket `airflow`")
         try:
             os.remove(temp_file.name)
         except OSError:
