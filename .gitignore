@@ -3,4 +3,5 @@
 .vscode
 .env
 airflow/logs
+airflow/tmp
 minio
