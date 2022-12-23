@@ -1,3 +1,4 @@
 pyarrow
 apache-airflow-providers-postgres
 apache-airflow-providers-amazon
+selectolax

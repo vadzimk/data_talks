@@ -4,7 +4,10 @@ username: `admin`
 password: `admin`  
 
 Local environment dependencies installation:  
-`pip install apache-airflow apache-airflow-providers-postgres apache-airflow-providers-amazon`
+`pip install apache-airflow
+apache-airflow-providers-postgres 
+apache-airflow-providers-amazon 
+selectolax`
 
 
 **Minio web UI:**  `localhost:9090`
