@@ -5,3 +5,4 @@
 airflow/logs
 airflow/tmp
 minio
+__pycache__/
