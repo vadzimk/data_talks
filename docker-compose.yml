@@ -7,18 +7,18 @@ services:
             - .env
         volumes:
             - postgres-db-volume:/var/lib/postgresql/data
-            - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./airflow/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
         healthcheck:
             test: ["CMD", "pg_isready", "-U", "airflow"]
             interval: 5s
             retries: 5
         restart: always
         ports:
-            - 5433:5432
+            - "5433:5432"
 
     scheduler:
         build:
-            context: .
+            context: airflow
             dockerfile: Dockerfile
         container_name: data-talks-scheduler
         command: scheduler
@@ -28,16 +28,15 @@ services:
         env_file:
             - .env
         volumes:
-            - ./dags:/opt/airflow/dags
-            - ./logs:/opt/airflow/logs
-            - ./plugins:/opt/airflow/plugins
-            - ./scripts:/opt/airflow/scripts
-            - ~/.google/credentials/:/.google/credentials
+            - ./airflow/dags:/opt/airflow/dags
+            - ./airflow/logs:/opt/airflow/logs
+            - ./airflow/plugins:/opt/airflow/plugins
+            - ./airflow/scripts:/opt/airflow/scripts
 
 
     webserver:
         build:
-            context: .
+            context: airflow
             dockerfile: Dockerfile
         container_name: data-talks-webserver
         entrypoint: /opt/airflow/scripts/entrypoint.sh
@@ -48,11 +47,10 @@ services:
         env_file:
             - .env
         volumes:
-            - ./dags:/opt/airflow/dags
-            - ./logs:/opt/airflow/logs
-            - ./plugins:/opt/airflow/plugins
-            - ~/.google/credentials/:/.google/credentials:ro
-            - ./scripts:/opt/airflow/scripts
+            - ./airflow/dags:/opt/airflow/dags
+            - ./airflow/logs:/opt/airflow/logs
+            - ./airflow/plugins:/opt/airflow/plugins
+            - ./airflow/scripts:/opt/airflow/scripts
         user: "${AIRFLOW_UID:-50000}:0"
         ports:
             - "8080:8080"
@@ -61,8 +59,8 @@ services:
         image: minio/minio
         container_name: data-talks-minio # boto does not support underscores in host names
         ports:
-            - 9000:9000
-            - 9090:9090
+            - "9000:9000"
+            - "9090:9090"
         environment:
             - MINIO_ROOT_USER=$MINIO_ROOT_USER
             - MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
@@ -89,5 +87,23 @@ services:
             mc admin trace myminio --verbose;
             "
 
+
+    clickhouse01:
+        image: clickhouse/clickhouse-server
+        container_name: data-talks-clickhouse01
+        hostname: data-talks-clickhouse01
+        ports:
+            - "8123:8123" # HTTP interface
+            - "9001:9000" # naive cli client
+        volumes:
+            - clickhouse-volume-data:/var/lib/clickhouse/
+            - ./clickhouse/config.d/:/etc/clickhouse-server/config.d/*.xml
+            - ./clickhouse/usert.d/:/etc/clickhouse-server/usert.d/*.xml
+            - ./clickhouse/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+        env_file:
+            -  .env
+
 volumes:
-  postgres-db-volume:
+    postgres-db-volume:
+    clickhouse-volume-data:
+

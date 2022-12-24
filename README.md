@@ -1,25 +1,32 @@
-[Ariflow tutorial](https://youtu.be/K9AnJ9_ZAXE)  
-**Airflow web UI:** `localhost:8080 `  
-username: `admin`  
-password: `admin`  
+# Data processing 
+(Data engineering)
 
-Local environment dependencies installation:  
-`pip install apache-airflow
-apache-airflow-providers-postgres 
-apache-airflow-providers-amazon 
-selectolax pyarrow`
+## Overview  
+This is a repo of infrastructure configuration and sample data processing code using python, sql, bash and the following tools:
 
+- **Apache Airflow** (task scheduling)
+- **dbt** (data transformation inside data warehouse)
+- 
+- 
 
-**Minio web UI:**  `localhost:9090`
-username, password — 
-see environment variables:
-`MINIO_ROOT_USER`  
-`MINIO_ROOT_PASSWORD`
-create a bucket `airflow`
-
-### Notes
-- connections are declared in `airflow/scripts/airflow_setup.py`,
-you can use look up connection ids from that file to use them in DAGs
-- [psycopg](https://www.psycopg.org/docs/) documentation for Python PostgreSQL database adapter
+## Projects
+1. Data ingestion from parquet files scraped from [yellow taxi data html page](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)  into OLAP database.
+2. 
 
 
+## Demo
+
+![Img alt text](Screenshot%202022-09-29%20app.png)
+
+
+## Stack
+
+- Airflow
+- dbt
+- Docker
+- Bash
+- Postgres
+- SQL
+
+## Usage
+See readme inside corresponding services

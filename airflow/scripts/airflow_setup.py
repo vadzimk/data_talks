@@ -14,6 +14,15 @@ def drop_all_connections(session):
 
 
 def create_connections(session):
+    clickhouse_conn = Connection(
+        conn_id=f"clickhouse_conn",
+        conn_type="clickhouse",
+        host=os.environ.get('CLICKHOUSE_HOST'),
+        port=os.environ.get('CLICKHOUSE_PORT'),
+        # schema=  # optional
+        login=os.environ.get('CLICKHOUSE_USER'),
+        password=os.environ.get('CLICKHOUSE_PASSWORD')
+    )
     postgres_test_db_conn = Connection(
         conn_id=f'postgres_test_db_conn',
         conn_type='postgres',
@@ -50,7 +59,8 @@ def create_connections(session):
 
     session.add_all([
         postgres_test_db_conn,
-        s3_minio_conn
+        s3_minio_conn,
+        clickhouse_conn
     ])
     session.commit()
 
