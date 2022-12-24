@@ -22,6 +22,10 @@ bucket_name = "yellow-taxi-trips"  # TODO auto create this bucket
 
 
 def save_trip_files_to_s3(ti):
+    """
+    gets links from task scrape_links_tlc and saves all the files pointing to the links
+    :param ti: The task instance
+    """
     links: list = ti.xcom_pull(task_ids='scrape_links_tlc')
     logging.info(f"Scrapped {len(links)} links")
     print("links[0]", links[0])
@@ -60,6 +64,10 @@ def get_postgres_engine():
 
 
 def s3_to_postgres():
+    """
+    downloads all objects from bucket
+    and creates corresponding tables in postgres provided by get_postgres_engine
+    """
     keys = s3_hook.list_keys(bucket_name=bucket_name)
     engine = get_postgres_engine()
     with engine.connect() as connection:
