@@ -7,7 +7,7 @@ Local environment dependencies installation:
 `pip install apache-airflow
 apache-airflow-providers-postgres 
 apache-airflow-providers-amazon 
-selectolax`
+selectolax pyarrow`
 
 
 **Minio web UI:**  `localhost:9090`
