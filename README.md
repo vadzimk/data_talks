@@ -5,6 +5,7 @@
 This is a repo of infrastructure configuration and sample data processing code using python, sql, bash and the following tools:
 
 - **Apache Airflow** (task scheduling)
+- **ClickHouse** (OLAP database)
 - **dbt** (data transformation inside data warehouse)
 - 
 - 
@@ -27,6 +28,7 @@ This is a repo of infrastructure configuration and sample data processing code u
 - Bash
 - Postgres
 - SQL
+- ClickHouse
 
 ## Usage
 See readme inside corresponding services

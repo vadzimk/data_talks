@@ -4,3 +4,4 @@ apache-airflow-providers-amazon
 selectolax
 pyarrow
 airflow-clickhouse-plugin
+clickhouse-sqlalchemy
