@@ -4,6 +4,8 @@
 .env
 airflow/logs
 airflow/tmp
-minio
 __pycache__/
 data_in/unpublished/
+minio/data
+mongo/data/
+clickhouse/data/
