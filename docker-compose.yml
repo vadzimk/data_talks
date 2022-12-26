@@ -33,7 +33,6 @@ services:
             - ./airflow/plugins:/opt/airflow/plugins
             - ./airflow/scripts:/opt/airflow/scripts
 
-
     webserver:
         build:
             context: airflow
@@ -53,14 +52,14 @@ services:
             - ./airflow/scripts:/opt/airflow/scripts
         user: "${AIRFLOW_UID:-50000}:0"
         ports:
-            - "8080:8080"
+            - "8080:8080"  # airflow terminal
 
     minio:
         image: minio/minio
         container_name: data-talks-minio # boto does not support underscores in host names
         ports:
             - "9000:9000"
-            - "9090:9090"
+            - "9090:9090" # terminal
         environment:
             - MINIO_ROOT_USER=$MINIO_ROOT_USER
             - MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
@@ -86,7 +85,7 @@ services:
             mc alias set myminio http://data-talks-minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD --api S3v4;
             mc admin trace myminio --verbose;
             "
-
+        restart: unless-stopped
 
     clickhouse01:
         image: clickhouse/clickhouse-server
@@ -96,14 +95,37 @@ services:
             - "8123:8123" # HTTP interface
             - "9001:9000" # naive cli client
         volumes:
-            - clickhouse-volume-data:/var/lib/clickhouse/
+            - ./clickhouse/data/:/var/lib/clickhouse/
             - ./clickhouse/config.d/:/etc/clickhouse-server/config.d/*.xml
             - ./clickhouse/usert.d/:/etc/clickhouse-server/usert.d/*.xml
             - ./clickhouse/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
         env_file:
             -  .env
 
+    mongo:
+        image: mongo
+        container_name: data-talks-mongo
+        restart: always
+        ports:
+            - "27017:27017"
+        volumes:
+            - ./mongo/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+            - ./mongo/data/:/data/db
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+            - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+
+    mongo-express:
+        image: mongo-express
+        container_name: data-talks-mongo-express
+        restart: always
+        ports:
+            - "8081:8081" # terminal
+        environment:
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=$ME_CONFIG_MONGODB_ADMINUSERNAME
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=$ME_CONFIG_MONGODB_ADMINPASSWORD
+            - ME_CONFIG_MONGODB_URL=$ME_CONFIG_MONGODB_URL
+
 volumes:
     postgres-db-volume:
-    clickhouse-volume-data:
 

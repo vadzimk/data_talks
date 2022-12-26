@@ -14,6 +14,16 @@ def drop_all_connections(session):
 
 
 def create_connections(session):
+    mongo_conn = Connection(
+        conn_id=f"mongo_conn",
+        conn_type="mongo",
+        host=os.environ.get('MONGO_HOST'),
+        port=os.environ.get('MONGO_PORT'), # srv cannot have port in url string InvalidURI("%s URIs must not include a port number" % (SRV_SCHEME,))
+        login=os.environ.get('MONGO_INITDB_ROOT_USERNAME'),
+        password=os.environ.get('MONGO_INITDB_ROOT_PASSWORD'),
+        schema="admin",  # authentication database, without it will not authenticate
+        # extra={"srv": True}
+    )
     clickhouse_conn = Connection(
         conn_id=f"clickhouse_conn",
         conn_type="clickhouse",
@@ -60,7 +70,8 @@ def create_connections(session):
     session.add_all([
         postgres_test_db_conn,
         s3_minio_conn,
-        clickhouse_conn
+        clickhouse_conn,
+        mongo_conn
     ])
     session.commit()
 

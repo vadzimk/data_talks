@@ -14,3 +14,4 @@ with DAG(dag_id="dag_w_s3_minio_v03", default_args=default_args,
                         bucket_name="airflow", bucket_key="data.csv",
                         poke_interval=5, # secs
                         timeout=30)
+

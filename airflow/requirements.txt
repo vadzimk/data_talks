@@ -5,3 +5,5 @@ selectolax
 pyarrow
 airflow-clickhouse-plugin
 clickhouse-sqlalchemy
+pymongo[srv]
+apache-airflow-providers-mongo

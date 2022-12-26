@@ -9,11 +9,19 @@ apache-airflow-providers-postgres
 apache-airflow-providers-amazon 
 selectolax pyarrow
 airflow-clickhouse-plugin
-clickhouse-sqlalchemy`
+clickhouse-sqlalchemy
+pymongo[srv]
+apache-airflow-providers-mongo
+`
 
 install dependencies in the running container:
 <pre><code>
-exec -it data-talks-webserver bash -c "pip install {package}";
+docker exec -it data-talks-webserver bash -c "pip install {package}";
+</code></pre>
+
+establish new connections in a running container:
+<pre><code>
+docker exec -it data-talks-webserver bash -c "python scripts/airflow_setup.py";
 </code></pre>
 
 
