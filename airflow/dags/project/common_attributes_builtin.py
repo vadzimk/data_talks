@@ -2,6 +2,8 @@ from typing import List
 
 from pymongo import MongoClient
 
+from dags.project.BuiltinScraper import get_mongo_client
+
 
 def find_keys_intersection(cursor: List[dict])->List[str]:
     current = set(cursor[0].keys())
