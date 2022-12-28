@@ -12,6 +12,7 @@ airflow-clickhouse-plugin
 clickhouse-sqlalchemy
 pymongo[srv]
 apache-airflow-providers-mongo
+sudo pip install python-dotenv
 `
 
 install dependencies in the running container:
