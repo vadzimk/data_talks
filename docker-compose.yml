@@ -101,6 +101,22 @@ services:
             - ./clickhouse/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
         env_file:
             -  .env
+        networks:
+            - data-talks-network
+
+    metabase: # with clickhouse driver plugin
+#        image: metabase/metabase:v0.45.1
+        build:
+            context: metabase
+            dockerfile: Dockerfile
+        container_name: data-talks-metabase
+        ports:
+        - "3002:3000"
+        env_file:
+            - .env
+        depends_on:
+            -   postgres
+
 
     mongo:
         image: mongo
@@ -119,6 +135,8 @@ services:
         image: mongo-express
         container_name: data-talks-mongo-express
         restart: always
+        depends_on:
+            - mongo
         ports:
             - "8081:8081" # terminal
         environment:
@@ -129,3 +147,5 @@ services:
 volumes:
     postgres-db-volume:
 
+networks:
+    data-talks-network:
