@@ -29,6 +29,8 @@ This is a repo of infrastructure configuration and sample data processing code u
 - Postgres
 - SQL
 - ClickHouse
+- Metabase
+- Superset
 
 ## Usage
 See readme inside corresponding services

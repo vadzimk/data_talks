@@ -101,8 +101,6 @@ services:
             - ./clickhouse/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
         env_file:
             -  .env
-        networks:
-            - data-talks-network
 
     metabase: # with clickhouse driver plugin
 #        image: metabase/metabase:v0.45.1
@@ -116,7 +114,6 @@ services:
             - .env
         depends_on:
             -   postgres
-
 
     mongo:
         image: mongo
@@ -144,8 +141,23 @@ services:
             - ME_CONFIG_MONGODB_ADMINPASSWORD=$ME_CONFIG_MONGODB_ADMINPASSWORD
             - ME_CONFIG_MONGODB_URL=$ME_CONFIG_MONGODB_URL
 
+    superset:
+        container_name: data-talks-superset
+        build:
+            context: superset
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        ports:
+          - "8088:8088"
+        depends_on:
+          - postgres
+          - clickhouse01
+        volumes:
+            - ./docker:/app/docker
+            - superset_home:/app/superset_home
+        env_file:
+            - .env
+
 volumes:
     postgres-db-volume:
-
-networks:
-    data-talks-network:
+    superset_home:
