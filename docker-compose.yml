@@ -113,7 +113,8 @@ services:
         env_file:
             - .env
         depends_on:
-            -   postgres
+            - postgres
+            - clickhouse01
 
     mongo:
         image: mongo
