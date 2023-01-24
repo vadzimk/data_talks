@@ -9,3 +9,4 @@ data_in/unpublished/
 minio/data
 mongo/data/
 clickhouse/data/
+*.drawio.bkp
